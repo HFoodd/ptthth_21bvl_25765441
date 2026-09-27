@@ -1,0 +1,400 @@
+════════════════════════════════════════════════════════════════════════════════
+                  LAB 04 - KẾT QUẢ KIỂM THỬ (SAMPLE)
+                     Lập trình Socket TCP và UDP trong Java
+════════════════════════════════════════════════════════════════════════════════
+
+SINH VIÊN: [Họ tên của bạn]
+MSSV: [Mã số sinh viên]
+NGÀY: 27/09/2026
+GITHUB: https://github.com/yourusername/lab04-socket
+
+════════════════════════════════════════════════════════════════════════════════
+VÍ DỤ 4.1 - KHẢO SÁT ĐỊA CHỈ MẠNG (HostInspector)
+════════════════════════════════════════════════════════════════════════════════
+
+TEST 1: localhost
+────────────────────────────────────────────────────────────────────────────────
+Lệnh: java -cp bin network.HostInspector localhost
+
+Kết quả:
+  === KHẢO SÁT ĐỊA CHỈ MẠNG ===
+  Host: localhost
+  Số lượng địa chỉ: 1
+  
+  Địa chỉ #1:
+    - IP: 127.0.0.1
+    - Loại: IPv4
+    - Tên Canonical: localhost
+    - Loopback: true
+    - Site Local: false
+    - Multicast: false
+
+✓ Kết quả đúng như mong đợi
+
+
+TEST 2: example.com
+────────────────────────────────────────────────────────────────────────────────
+Lệnh: java -cp bin network.HostInspector example.com
+
+Kết quả:
+  === KHẢO SÁT ĐỊA CHỈ MẠNG ===
+  Host: example.com
+  Số lượng địa chỉ: 1
+  
+  Địa chỉ #1:
+    - IP: 93.184.216.34
+    - Loại: IPv4
+    - Tên Canonical: example.com
+    - Loopback: false
+    - Site Local: false
+    - Multicast: false
+
+✓ Kết quả đúng - đó là IP public của example.com
+
+
+TEST 3: host-khong-ton-tai.invalid
+────────────────────────────────────────────────────────────────────────────────
+Lệnh: java -cp bin network.HostInspector host-khong-ton-tai.invalid
+
+Kết quả:
+  ❌ Lỗi: Không thể phân giải hostname 'host-khong-ton-tai.invalid'
+     Kiểm tra tên hostname hoặc kết nối mạng.
+
+✓ Xử lý lỗi đúng
+
+
+════════════════════════════════════════════════════════════════════════════════
+VÍ DỤ 4.2 - TCP SERVER TUẦN TỰ (TcpCommandServer)
+════════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - Server:
+  java -cp bin tcp.TcpCommandServer
+
+Output:
+  === TCP COMMAND SERVER ===
+  Server đang lắng nghe trên cổng 5000
+  Đợi kết nối từ client...
+  
+  ✓ Client kết nối từ: /127.0.0.1:54321
+
+TERMINAL 2 - Client:
+  java -cp bin tcp.TcpCommandClient localhost 5000
+
+Output:
+  === TCP COMMAND CLIENT ===
+  ✓ Kết nối tới localhost:5000
+  
+  Các lệnh có thể sử dụng:
+    PING              - Kiểm tra server còn hoạt động
+    TIME              - Lấy thời gian từ server
+    UPPER <text>     - Chuyển <text> thành chữ hoa
+    QUIT              - Thoát khỏi chương trình
+  
+  Nhập lệnh (gõ QUIT để thoát):
+  
+  > PING
+  Server: OK PONG
+  
+  > UPPER xin chào Việt Nam
+  Server: OK XIN CHÀO VIỆT NAM
+  
+  > TIME
+  Server: OK 2026-09-27T14:30:45.123456789
+  
+  > ABC
+  Server: ERR UNKNOWN_COMMAND
+  
+  > QUIT
+  Server: OK BYE
+  
+  ✓ Kết nối đã đóng
+
+Server output (đồng thời):
+  ✓ Client kết nối từ: /127.0.0.1:54321
+  ✓ Client ngắt kết nối
+
+✓ TẤT CẢ CÁC TEST PASS
+
+
+════════════════════════════════════════════════════════════════════════════════
+VÍ DỤ 4.3 - TCP SERVER ĐA CLIENT (MultiClientTcpServer)
+════════════════════════════════════════════════════════════════════════════════
+
+Test: 3 clients kết nối cùng lúc
+
+TERMINAL 1 - Server:
+  java -cp bin tcp.MultiClientTcpServer
+
+Output:
+  === MULTI-CLIENT TCP SERVER ===
+  Server đang lắng nghe trên cổng 5000
+  Có thể phục vụ tối đa 20 client đồng thời
+  
+  ✓ Client kết nối từ: /127.0.0.1:54321
+  ✓ Client kết nối từ: /127.0.0.1:54322
+  ✓ Client kết nối từ: /127.0.0.1:54323
+  [các client gửi lệnh]
+  ✓ Client ngắt kết nối: /127.0.0.1:54321
+  ✓ Client ngắt kết nối: /127.0.0.1:54322
+  ✓ Client ngắt kết nối: /127.0.0.1:54323
+
+TERMINAL 2, 3, 4 - Clients (chạy đồng thời):
+
+Client 1:
+  > PING
+  Server: OK PONG
+  > UPPER hello
+  Server: OK HELLO
+  > QUIT
+
+Client 2:
+  > TIME
+  Server: OK 2026-09-27T14:30:45.123456789
+  > QUIT
+
+Client 3:
+  > UPPER xin chào
+  Server: OK XIN CHÀO
+  > QUIT
+
+✓ Cả 3 clients hoạt động đồng thời, không bị chặn
+
+
+════════════════════════════════════════════════════════════════════════════════
+VÍ DỤ 4.4 - UDP ECHO SERVER (UdpEchoServer)
+════════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - Server:
+  java -cp bin udp.UdpEchoServer
+
+Output:
+  === UDP ECHO SERVER ===
+  Server UDP đang lắng nghe trên cổng 5001
+  Kích thước buffer: 4096 byte
+  
+  Nhận từ 127.0.0.1:54321 > xin chào UDP
+  Gửi phản hồi: ACK XIN CHÀO UDP
+  
+  Nhận từ 127.0.0.1:54322 > hello
+  Gửi phản hồi: ACK HELLO
+
+TERMINAL 2 - Client test 1:
+  java -cp bin udp.UdpEchoClient localhost 5001 "xin chào UDP"
+
+Output:
+  === UDP ECHO CLIENT ===
+  Máy chủ: localhost:5001
+  Thông điệp: xin chào UDP
+  Timeout: 3000ms
+  
+  Đang gửi...
+  Chờ phản hồi (timeout sau 3000ms)...
+  
+  ✓ Nhận được phản hồi từ 127.0.0.1:5001
+  Nội dung: ACK XIN CHÀO UDP
+
+✓ Tiếng Việt được bảo toàn đúng
+
+
+Test: Server chưa chạy (Test timeout)
+────────────────────────────────────────────────────────────────────────────────
+TERMINAL 2 - Client:
+  java -cp bin udp.UdpEchoClient localhost 5001 "test"
+
+Output:
+  === UDP ECHO CLIENT ===
+  Máy chủ: localhost:5001
+  Thông điệp: test
+  Timeout: 3000ms
+  
+  Đang gửi...
+  Chờ phản hồi (timeout sau 3000ms)...
+  
+  ❌ Lỗi: Hết thời gian chờ (3000ms)
+     Kiểm tra:
+     - Server có đang chạy không?
+     - Host và port có đúng không?
+     - Firewall có chặn UDP port 5001 không?
+
+✓ Timeout hoạt động đúng - không chờ vô hạn
+
+
+════════════════════════════════════════════════════════════════════════════════
+BÀI TẬP 1 - CHUYỂN CHỮ SỐ THÀNH CHỮ (Ex1_DigitToText)
+════════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - Server:
+  java -cp bin exercise.Ex1_DigitToText server
+
+Output:
+  === BÀI TẬP 1 - SERVER (Chuyển đổi chữ số) ===
+  Server lắng nghe trên cổng 5010
+  ✓ TCP Client kết nối từ: /127.0.0.1:54321
+
+TERMINAL 2 - Client:
+  java -cp bin exercise.Ex1_DigitToText client localhost 5010
+
+Client input & Output:
+  > 0
+  -> OK Không
+  
+  > 5
+  -> OK Năm
+  
+  > 9
+  -> OK Chín
+  
+  > 10
+  -> ERR INVALID_DIGIT
+  
+  > a
+  -> ERR INVALID_DIGIT
+  
+  > (rỗng)
+  -> ERR INVALID_DIGIT
+  
+  >  5  (có space)
+  -> OK Năm
+  
+  > QUIT
+  -> OK BYE
+
+✓ TẤT CẢ CÁC CA KIỂM THỬ ĐỀU PASS
+
+
+════════════════════════════════════════════════════════════════════════════════
+BÀI TẬP 2 - DỊCH VỤ NGÀY GIỜ TCP/UDP (Ex2_DateTimeService)
+════════════════════════════════════════════════════════════════════════════════
+
+TCP TEST:
+────────────────────────────────────────────────────────────────────────────────
+TERMINAL 1: java -cp bin exercise.Ex2_DateTimeService tcp-server
+TERMINAL 2: java -cp bin exercise.Ex2_DateTimeService tcp-client localhost 5011
+
+Output:
+  > DATE
+  -> OK 27/09/2026
+  
+  > TIME
+  -> OK 14:30:45
+  
+  > DATETIME
+  -> OK 27/09/2026 14:30:45
+  
+  > QUIT
+  -> OK BYE
+
+UDP TEST:
+────────────────────────────────────────────────────────────────────────────────
+TERMINAL 3: java -cp bin exercise.Ex2_DateTimeService udp-server
+TERMINAL 4: java -cp bin exercise.Ex2_DateTimeService udp-client localhost 5012 DATE
+
+Output:
+  === BÀI TẬP 2 - UDP CLIENT ===
+  Gửi: DATE
+  Nhận: OK 27/09/2026
+
+  java -cp bin exercise.Ex2_DateTimeService udp-client localhost 5012 TIME
+  === BÀI TẬP 2 - UDP CLIENT ===
+  Gửi: TIME
+  Nhận: OK 14:30:45
+
+  java -cp bin exercise.Ex2_DateTimeService udp-client localhost 5012 DATETIME
+  === BÀI TẬP 2 - UDP CLIENT ===
+  Gửi: DATETIME
+  Nhận: OK 27/09/2026 14:30:45
+
+✓ TỰ CẢ TCP VÀ UDP ĐỀU HOẠT ĐỘNG
+
+
+════════════════════════════════════════════════════════════════════════════════
+BÀI TẬP 3 - MÁY TÍNH TỪ XA (Ex3_RemoteCalculator)
+════════════════════════════════════════════════════════════════════════════════
+
+TERMINAL 1 - Server:
+  java -cp bin exercise.Ex3_RemoteCalculator server
+
+Output:
+  === BÀI TẬP 3 - MÁY TÍNH TỪXƯƠNG (Calculator Server) ===
+  Server lắng nghe trên cổng 5013
+  Các phép toán hỗ trợ: +, -, *, /
+
+TERMINAL 2 - Client:
+  java -cp bin exercise.Ex3_RemoteCalculator client localhost 5013
+
+Client input & Output:
+  > CALC + 100 200
+  -> OK 300
+  
+  > CALC - 50 10
+  -> OK 40
+  
+  > CALC * 5 6
+  -> OK 30
+  
+  > CALC / 10 2
+  -> OK 5
+  
+  > CALC / 10 0
+  -> ERR DIVIDE_BY_ZERO
+  
+  > CALC % 10 3
+  -> ERR UNSUPPORTED_OPERATOR
+  
+  > CALC + a 2
+  -> ERR INVALID_NUMBER
+  
+  > CALC +
+  -> ERR INVALID_FORMAT
+  
+  > QUIT
+  -> OK BYE
+
+✓ TẤT CẢ CÁC CA KIỂM THỬ ĐỀU PASS
+
+
+════════════════════════════════════════════════════════════════════════════════
+KẾT LUẬN
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Ví dụ 4.1: PASS - HostInspector hoạt động đúng
+✓ Ví dụ 4.2: PASS - TCP Server tuần tự hoạt động đúng
+✓ Ví dụ 4.3: PASS - TCP Server đa client hoạt động đúng
+✓ Ví dụ 4.4: PASS - UDP Echo Server hoạt động đúng
+✓ Bài tập 1: PASS - Chuyển chữ số thành chữ hoạt động đúng
+✓ Bài tập 2: PASS - Dịch vụ ngày giờ TCP/UDP hoạt động đúng
+✓ Bài tập 3: PASS - Máy tính từ xa hoạt động đúng
+
+Tổng: 7/7 - 100% HOÀN THÀNH
+
+
+NHẬN XÉT:
+─────────────────────────────────────────────────────────────────────────────
+1. TCP vs UDP:
+   - TCP đảm bảo thứ tự và gửi đến (phù hợp chat, transfer)
+   - UDP nhanh nhưng không đảm bảo (phù hợp streaming)
+
+2. Charset UTF-8:
+   - Tiếng Việt được bảo toàn đúng trên cả TCP và UDP
+   - Cần chỉ định StandardCharsets.UTF_8 khi tạo stream
+
+3. Thread Pool:
+   - Server đa client hoạt động mượt hơn server tuần tự
+   - Executors.newFixedThreadPool() quản lý tài nguyên tốt
+
+4. Timeout UDP:
+   - Cần setSoTimeout() để không chờ vô hạn
+   - Nếu server không phản hồi, client sẽ timeout sau 3 giây
+
+5. Giao thức ứng dụng:
+   - Cần định nghĩa rõ format request/response
+   - Xử lý lỗi theo đúng giao thức
+
+
+════════════════════════════════════════════════════════════════════════════════
+Tài liệu tham khảo được sử dụng:
+- Java Networking API Documentation
+- RFC 793 (TCP), RFC 768 (UDP)
+- UTF-8 Encoding Standard
+
+════════════════════════════════════════════════════════════════════════════════

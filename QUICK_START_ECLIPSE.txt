@@ -1,0 +1,153 @@
+════════════════════════════════════════════════════════════════════════════════
+                    🚀 QUICK START - CHẠY TRÊN ECLIPSE
+════════════════════════════════════════════════════════════════════════════════
+
+BƯỚC 1: Import dự án
+────────────────────────────────────────────────────────────────────────────────
+File → Import → General → Existing Projects into Workspace
+→ Select root directory: d:\IUH\Tich Hop\lab04-socket
+→ Finish
+
+
+BƯỚC 2: Build Project
+────────────────────────────────────────────────────────────────────────────────
+Project → Build Project (hoặc Ctrl+B)
+
+
+BƯỚC 3: Chạy ví dụ/bài tập
+────────────────────────────────────────────────────────────────────────────────
+
+📌 VÍ DỤ 4.1 - HostInspector
+   Right-click HostInspector.java
+   → Run Configurations
+   → Arguments: localhost
+   → Run
+
+
+📌 VÍ DỤ 4.2 - TCP Server + Client
+   
+   TERMINAL 1 (Server):
+   - Right-click TcpCommandServer.java
+   - Run As → Java Application
+   - (Không cần arguments)
+   
+   TERMINAL 2 (Client):
+   - Right-click TcpCommandClient.java
+   - Run Configurations
+   - Arguments: localhost 5000
+   - Run
+   
+   CLIENT CONSOLE gõ: PING → Server: OK PONG
+
+
+📌 VÍ DỤ 4.3 - Multi-Client TCP
+   
+   SERVER:
+   - Run MultiClientTcpServer.java
+   
+   CLIENT 1, 2, 3:
+   - Run TcpCommandClient.java (3 lần)
+   - Arguments: localhost 5000
+
+
+📌 VÍ DỤ 4.4 - UDP Echo
+   
+   SERVER:
+   - Run UdpEchoServer.java
+   
+   CLIENT (tùy chọn):
+   - Run Configurations
+   - Arguments: localhost 5001 "xin chào UDP"
+   - Run
+
+
+🎯 BÀI TẬP 1 - Chữ Số Thành Chữ
+   
+   SERVER:
+   - Arguments: server
+   
+   CLIENT:
+   - Arguments: client localhost 5010
+
+
+🎯 BÀI TẬP 2 - Dịch Vụ Ngày Giờ TCP/UDP
+   
+   TCP SERVER:
+   - Arguments: tcp-server
+   
+   TCP CLIENT:
+   - Arguments: tcp-client localhost 5011
+   
+   UDP SERVER:
+   - Arguments: udp-server
+   
+   UDP CLIENT (3 lần test):
+   - Arguments: udp-client localhost 5012 DATE
+   - Arguments: udp-client localhost 5012 TIME
+   - Arguments: udp-client localhost 5012 DATETIME
+
+
+🎯 BÀI TẬP 3 - Máy Tính Từ Xa
+   
+   SERVER:
+   - Arguments: server
+   
+   CLIENT:
+   - Arguments: client localhost 5013
+
+
+════════════════════════════════════════════════════════════════════════════════
+💡 MẸO - RUN CONFIGURATIONS
+════════════════════════════════════════════════════════════════════════════════
+
+1. Right-click file .java
+2. Run As → Run Configurations...
+3. Tab "Arguments" (phía dưới)
+4. "Program arguments": gõ tham số
+5. Click "Run" hoặc "Apply" rồi "Run"
+
+Hoặc đơn giản: Right-click → Run As → Java Application
+
+
+════════════════════════════════════════════════════════════════════════════════
+🔧 GHI CHÚ
+════════════════════════════════════════════════════════════════════════════════
+
+✓ Khi chạy Server + Client, có 2 Console tabs riêng biệt
+✓ Gõ lệnh trong Console Client tab
+✓ Nhấn Enter để gửi lệnh
+✓ Đóng Server bằng cách gõ QUIT hoặc click stop button (■)
+✓ Console → View → (nếu không thấy là dùng Window → Show View → Console)
+
+
+════════════════════════════════════════════════════════════════════════════════
+📝 TEST CASE QUICK CHECK
+════════════════════════════════════════════════════════════════════════════════
+
+VÍ DỤ 4.1:
+  Input: localhost → Output: IPv4, Loopback=true ✓
+
+VÍ DỤ 4.2 TCP:
+  Input: PING → Output: OK PONG ✓
+
+VÍ DỤ 4.4 UDP:
+  Input: "xin chào UDP" → Output: ACK XIN CHÀO UDP ✓
+
+BÀI TẬP 1:
+  Input: 5 → Output: OK Năm ✓
+
+BÀI TẬP 2 TCP:
+  Input: DATE → Output: OK 27/09/2026 ✓
+
+BÀI TẬP 2 UDP:
+  Input: udp-client localhost 5012 TIME → Output: OK 14:30:45 ✓
+
+BÀI TẬP 3:
+  Input: CALC + 100 200 → Output: OK 300 ✓
+
+
+════════════════════════════════════════════════════════════════════════════════
+
+✨ XEM FILE ECLIPSE_TUTORIAL.md ĐỂ CÓ HƯỚNG DẪN CHI TIẾT! ✨
+
+════════════════════════════════════════════════════════════════════════════════

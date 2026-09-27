@@ -1,0 +1,25 @@
+# Biên dịch
+bin/
+*.class
+*.jar
+
+# IDE
+.classpath
+.project
+.settings/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Maven/Gradle
+target/
+build/
+.gradle/
+
+# IDE specifics
+.vscode/
+*.code-workspace
